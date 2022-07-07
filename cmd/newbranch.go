@@ -25,6 +25,36 @@ var newbranchCmd = &cobra.Command{
 		}
 		hasMain := hasMainBranch(repo)
 		fmt.Println(hasMain)
+		worktree, _ := repo.Worktree()
+		if hasMain {
+			fmt.Println("Checkout Main")
+			err := worktree.Checkout(&git.CheckoutOptions{Branch: "refs/heads/main", Keep: true})
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			fmt.Println("Checkout master")
+			err := worktree.Checkout(&git.CheckoutOptions{Branch: "refs/heads/master", Keep: true})
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		fmt.Println("Pulling")
+
+		err1 := worktree.Pull(&git.PullOptions{RemoteName: "origin"})
+		if err1 != nil {
+			log.Fatal(err1)
+		}
+
+		fmt.Println("head")
+		head, err := repo.Head()
+
+		fmt.Println(head.Hash())
+		fmt.Println("new branch")
+		err2 := worktree.Checkout(&git.CheckoutOptions{Branch: "refs/heads/my-new-branch4", Create: true, Keep: true})
+		if err2 != nil {
+			log.Fatal(err2)
+		}
 
 	},
 }
