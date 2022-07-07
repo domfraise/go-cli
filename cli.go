@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 func main() {
 	fmt.Println("Hello, world.")
@@ -48,11 +51,25 @@ func main() {
 	myNum = 100000
 	fmt.Println(xBig())
 
+	//objects
 	myPair := pair{3, 5}
 	fmt.Println(myPair.MyMethod())
 	var myInterface MyInterface
 	myInterface = myPair
 	fmt.Println(myInterface.MyMethod())
+
+	//errors
+	myMap2 := map[int]string{3: "three", 4: "four"}
+	if x, ok := myMap2[1]; !ok {
+		fmt.Println("Index not here!")
+	} else {
+		fmt.Println(x)
+	}
+
+	if _, err := strconv.Atoi("non-int"); err != nil {
+		fmt.Println(err)
+	}
+
 }
 
 type MyInterface interface {
