@@ -6,8 +6,11 @@ package cmd
 
 import (
 	"fmt"
-
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/spf13/cobra"
+	"log"
+	"strings"
 )
 
 // newbranchCmd represents the newbranch command
@@ -16,8 +19,26 @@ var newbranchCmd = &cobra.Command{
 	Short: "Create and checkout a new branch",
 	Long:  `Stash any current changes, checks out either main or master, pulls, then creates new branch`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("newbranch called")
+		repo, err := git.PlainOpen("./") //this
+		if err != nil {
+			log.Fatal(err)
+		}
+		hasMain := hasMainBranch(repo)
+		fmt.Println(hasMain)
+
 	},
+}
+
+func hasMainBranch(repo *git.Repository) (hasMain bool) {
+	branches, _ := repo.Branches()
+	branches.ForEach(func(c *plumbing.Reference) error {
+		fmt.Println(c)
+		if strings.Contains(c.String(), "refs/heads/main") {
+			hasMain = true
+		}
+		return nil
+	})
+	return
 }
 
 func init() {
