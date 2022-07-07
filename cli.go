@@ -70,6 +70,32 @@ func main() {
 		fmt.Println(err)
 	}
 
+	//concurrency
+	c := make(chan int)
+
+	go increment(0, c)
+	go increment(10, c)
+	go increment(-110, c)
+
+	fmt.Println(<-c, <-c, <-c)
+
+	cs := make(chan string)
+	css := make(chan chan string)
+	go func() { cs <- "wordy" }()
+	go func() { c <- 84 }()
+
+	select {
+	case i := <-c:
+		fmt.Printf("it is a %T", i)
+	case <-cs:
+		fmt.Println("its a string")
+	case <-css:
+		fmt.Println("didn't happen")
+	}
+
+}
+func increment(i int, c chan int) {
+	c <- i + 1
 }
 
 type MyInterface interface {
