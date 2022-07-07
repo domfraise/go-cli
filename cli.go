@@ -47,6 +47,23 @@ func main() {
 	fmt.Println(xBig())
 	myNum = 100000
 	fmt.Println(xBig())
+
+	myPair := pair{3, 5}
+	fmt.Println(myPair.MyMethod())
+	var myInterface MyInterface
+	myInterface = myPair
+	fmt.Println(myInterface.MyMethod())
+}
+
+type MyInterface interface {
+	MyMethod() string
+}
+type pair struct {
+	x, y int
+}
+
+func (p pair) MyMethod() string {
+	return fmt.Sprintf("%d,%d", p.x, p.y)
 }
 
 func passByReference(incomingSlice *[]string) []string {
